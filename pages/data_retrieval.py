@@ -3,6 +3,13 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 from datetime import datetime
+import pathlib
+
+
+path = pathlib.Path(__file__).parent.absolute()
+print("Path = ",path)
+image_path = path / '..' / 'assets' / 'login_bg.png'
+
 
 #Setup
 root = Tk()
@@ -13,7 +20,9 @@ dimensions = str("%sx%s" % (x_size,y_size))
 root.geometry(dimensions)
 root.title("Login")
 root.resizable(width=False, height=False)
-
+bg = PhotoImage(file=image_path)
+background = ttk.Label(root, image=bg)
+background.place(x=-2,y=-2)
 
 label_font = ("Roboto", 12)
 user_id_label =  ttk.Label(root,     font = label_font)
@@ -42,30 +51,21 @@ points = None
 login_info_field = ttk.Entry()
 
 def draw_decorations():
-    canvas = Canvas(root, width = 600, height = 80)
-    canvas.place(x = -10, y = -10)
-    rectangle = canvas.create_rectangle(0, 0, 600, 300, fill='black')
-
-    canvas2 = Canvas(root, width = 600, height = 80)
-    canvas2.place(x = -10, y = 420)
-    rectangle2 = canvas2.create_rectangle(0, 0, 700, 700,fill='black')
-
-
     style = ttk.Style()
-    style.configure("BY.TLabel", background = "black", foreground = "yellow")
+    style.configure("BY.TLabel", background = "#292929", foreground = "#ffc815")
     title = ttk.Label(root, text="THE META-GYM USER LOGIN", font = ("Roboto", 18, "bold"), style="BY.TLabel")
     title.place(x = 250,y = 35, anchor = "center")
 
 def draw_labels(x_pos, y_pos):
     label_font = ("Roboto", 12, "bold")
-    user_id_label =  ttk.Label(root, text="ID: ",     font = label_font).place(x = x_pos+250,y = y_pos+4*30, anchor = "e")
-    first_name_label =  ttk.Label(root, text="First Name: ",     font = label_font).place(x = x_pos,y = y_pos, anchor = "e")
-    last_name_label =   ttk.Label(root, text="Last Name: ",      font = label_font).place(x = x_pos,y = y_pos+30, anchor = "e")
-    phone_label =       ttk.Label(root, text="Phone Number: ",    font = label_font).place(x = x_pos+250,y = y_pos, anchor = "e")
-    sex_label =         ttk.Label(root, text="Sex: ",            font = label_font).place(x = x_pos,y = y_pos+2*30, anchor = "e")
-    dob_label =         ttk.Label(root, text="Date of Birth: ",  font = label_font).place(x = x_pos+250,y = y_pos+30, anchor = "e")
-    weight_label =      ttk.Label(root, text="Weight: ",          font = label_font).place(x = x_pos+250,y = y_pos+2*30, anchor = "e")
-    dor_label =         ttk.Label(root, text="Date of \nRegistration: ", font = label_font).place(x = x_pos, y = y_pos+4*30, anchor = "e")
+    user_id_label =  ttk.Label(root, text="ID: ",     font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos+250,y = y_pos+4*30, anchor = "e")
+    first_name_label =  ttk.Label(root, text="First Name: ",     font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos,y = y_pos, anchor = "e")
+    last_name_label =   ttk.Label(root, text="Last Name: ",      font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos,y = y_pos+30, anchor = "e")
+    phone_label =       ttk.Label(root, text="Phone Number: ",    font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos+250,y = y_pos, anchor = "e")
+    sex_label =         ttk.Label(root, text="Sex: ",            font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos,y = y_pos+2*30, anchor = "e")
+    dob_label =         ttk.Label(root, text="Date of Birth: ",  font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos+250,y = y_pos+30, anchor = "e")
+    weight_label =      ttk.Label(root, text="Weight: ",          font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos+250,y = y_pos+2*30, anchor = "e")
+    dor_label =         ttk.Label(root, text="Date of \nRegistration: ", font = label_font, background="#292929", foreground = "#ffc815").place(x = x_pos, y = y_pos+4*30, anchor = "e")
 
 def draw_data(x_pos,y_pos):
     global user_id_label, first_name_data, last_name_data, phone_data,sex_data,dob_data,weight_data,dor_data
@@ -79,14 +79,14 @@ def draw_data(x_pos,y_pos):
     weight_data.place(x = x_pos+250,y = y_pos+2*30, anchor = "w")
     dor_data.place(x = x_pos, y = y_pos+130, anchor = "w")
 
-    user_id_label.config(text = user_id)
-    first_name_data.config(text=first_name)
-    last_name_data.config(text=last_name)
-    phone_data.config(text = phone_number)
-    sex_data.config(text = sex)
-    dob_data.config(text = dob)
-    weight_data.config(text = weight)
-    dor_data.config(text = dor)
+    user_id_label.config(text = user_id, background="#292929", foreground = "#ffc815")
+    first_name_data.config(text=first_name, background="#292929", foreground = "#ffc815")
+    last_name_data.config(text=last_name, background="#292929", foreground = "#ffc815")
+    phone_data.config(text = phone_number, background="#292929", foreground = "#ffc815")
+    sex_data.config(text = sex, background="#292929", foreground = "#ffc815")
+    dob_data.config(text = dob, background="#292929", foreground = "#ffc815")
+    weight_data.config(text = weight, background="#292929", foreground = "#ffc815")
+    dor_data.config(text = dor, background="#292929", foreground = "#ffc815")
 
 
 def draw_login_form(x_pos, y_pos):

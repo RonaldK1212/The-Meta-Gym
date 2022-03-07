@@ -3,13 +3,10 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 from datetime import datetime
-import os
-
 import pathlib
 
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
-
 image_path = path / '..' / 'assets' / 'registration_bg.png'
 
 #Setup
