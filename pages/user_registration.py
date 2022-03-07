@@ -3,14 +3,14 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 from datetime import datetime
+import os
+
 import pathlib
-from os.path import abspath
 
-path = pathlib.Path(__file__).parent.resolve()
+print(pathlib.Path.cwd())
 
-image_path = abspath(str(path)+"../assets/registration_bg.png")
+image_path = str(pathlib.Path.cwd())+"/assets/registration_bg.png"
 
-print(image_path)
 #Setup
 root = Tk()
 frm = ttk.Frame(root, padding=10)
@@ -67,7 +67,7 @@ def draw_input_boxes(x_pos, y_pos, width):
     male.place(x= x_pos+15,y=y_pos+4*30, anchor = "w")
     female.config(bg="#ffc815")
     female.place(x= x_pos+85,y=y_pos+4*30, anchor = "w")
-    other.config(bg="#292929")
+    other.config(bg="#292929", fg = "#ffc815")
     other.place(x= x_pos+165,y=y_pos+4*30, anchor = "w")
     dob_field.insert(0,"YYYY-MM-DD")
     dob_field.place(x = x_pos,y = y_pos+5*30 ,width=width,anchor = "w")
