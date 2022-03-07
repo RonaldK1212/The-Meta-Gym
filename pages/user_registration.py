@@ -10,7 +10,7 @@ import pathlib
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
 
-image_path = str(pathlib.Path.cwd()) / 'assets' / 'registration_bg.png'
+image_path = path / '..' / 'assets' / 'registration_bg.png'
 
 #Setup
 root = Tk()
