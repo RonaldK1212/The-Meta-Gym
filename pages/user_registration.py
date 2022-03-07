@@ -11,7 +11,7 @@ root.geometry("500x400")
 root.title("Registration")
 root.resizable(width=False, height=False)
 #root.wm_attributes('-transparentcolor', root['bg'])
-bg = PhotoImage(file="registration_bg.png")
+bg = PhotoImage(file=".assets/registration_bg.png")
 background = ttk.Label(root, image=bg)
 background.place(x=-2,y=-2)
 
@@ -38,15 +38,6 @@ other = Radiobutton(root, text="Other", variable=sex_input, value=3)
 
 #Functions defined here
 def draw_decorations():
-    canvas = Canvas(root, width = 600, height = 80)
-    #canvas.place(x = -10, y = -10)
-    #rectangle = canvas.create_rectangle(0, 0, 600, 300, fill='black')
-
-    canvas2 = Canvas(root, width = 600, height = 80)
-    #canvas2.place(x = -10, y = 360)
-    #rectangle2 = canvas2.create_rectangle(0, 0, 700, 700,fill='black')
-
-
     style = ttk.Style()
     style.configure("BY.TLabel", background="#ffc815")
     title = ttk.Label(root, text="THE META-GYM USER REGISTRATION", font = ("Roboto", 18, "bold"), style="BY.TLabel")

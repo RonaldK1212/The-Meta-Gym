@@ -1,6 +1,4 @@
-import user_registration
-import data_retrieval
-
+from .pages import user_registration, data_retrieval
 
 def main():
     user_registration.main()
