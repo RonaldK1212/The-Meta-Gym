@@ -3,14 +3,21 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 from datetime import datetime
+import pathlib
+from os.path import abspath
 
+path = pathlib.Path(__file__).parent.resolve()
+
+image_path = abspath(str(path)+"../assets/registration_bg.png")
+
+print(image_path)
 #Setup
 root = Tk()
 frm = ttk.Frame(root, padding=10)
 root.geometry("500x400")
 root.title("Registration")
 root.resizable(width=False, height=False)
-bg = PhotoImage(file="./assets/registration_bg.png")
+bg = PhotoImage(file=image_path)
 background = ttk.Label(root, image=bg)
 background.place(x=-2,y=-2)
 
