@@ -7,9 +7,10 @@ import os
 
 import pathlib
 
-print(pathlib.Path.cwd())
+path = pathlib.Path().parent.absolute()
+print("Path = ",path)
 
-image_path = str(pathlib.Path.cwd())+"/assets/registration_bg.png"
+#image_path = str(pathlib.Path.cwd())+"/assets/registration_bg.png"
 
 #Setup
 root = Tk()
@@ -17,9 +18,9 @@ frm = ttk.Frame(root, padding=10)
 root.geometry("500x400")
 root.title("Registration")
 root.resizable(width=False, height=False)
-bg = PhotoImage(file=image_path)
-background = ttk.Label(root, image=bg)
-background.place(x=-2,y=-2)
+#bg = PhotoImage(file=image_path)
+#background = ttk.Label(root, image=bg)
+#background.place(x=-2,y=-2)
 
 first_name = None
 last_name = None
