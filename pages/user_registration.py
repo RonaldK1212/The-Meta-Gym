@@ -4,15 +4,10 @@ from tkinter import messagebox
 import sqlite3
 from datetime import datetime
 import pathlib
-import RPi.GPIO as GPIO
-from mfrc522 import SimpleMFRC522
-reader = SimpleMFRC522()
 
-
-from matplotlib.pyplot import title
-import RPi.GPIO as GPIO
-from mfrc522 import SimpleMFRC522
-reader = SimpleMFRC522()
+#import RPi.GPIO as GPIO
+#from mfrc522 import SimpleMFRC522
+#reader = SimpleMFRC522()
 
 
 path = pathlib.Path(__file__).parent.absolute()
@@ -99,25 +94,15 @@ def draw_buttons(x_pos, y_pos):
     clear_fields.place(x = x_pos + 100, y = y_pos)
 
 def scan_card():
-<<<<<<< HEAD
     if messagebox.askokcancel(title="Card Scanner", message= "Press OK to start scanning for card."):
         #WRITE CARD SCAN CODE 
         global user_id
         user_id_data.config(text = "")
-    #    user_id = input("Enter used ID to simulate card swipe: ")
-        user_id = reader.read()[0]
+        user_id = input("Enter used ID to simulate card swipe: ")
+    #    user_id = reader.read()[0]
         user_id_data.config(text = user_id)
     else:
         quit()
-=======
-    messagebox.showinfo(title="Card Scanner", message= "Please scan your card now.")
-    #WRITE CARD SCAN CODE 
-    global user_id
-    user_id_data.config(text = "")
-#     user_id = input("Enter used ID to simulate card swipe: ")
-    user_id = reader.read()[0]
-    user_id_data.config(text = user_id)
->>>>>>> 99f45f3510aa2c21f6c1e4b71ad0f72cbb69907a
 
 def fetch_data():
     global user_id, first_name, last_name, email, phone, sex, dob, weight
@@ -153,10 +138,8 @@ def store_in_database():
         cur.execute("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,NULL,NULL,NULL)", (user_id, dor, first_name, last_name, email, phone, sex, dob, weight))
         con.commit()
         con.close()
-<<<<<<< HEAD
         messagebox.showinfo(title="Registered", message="You have registered successfully!")
-=======
->>>>>>> 99f45f3510aa2c21f6c1e4b71ad0f72cbb69907a
+        clear_text()
     
     
 
@@ -172,10 +155,6 @@ def main():
     draw_input_boxes(155, 100, 300)
     draw_buttons(150, 320)
     scan_card()
-<<<<<<< HEAD
-=======
-
->>>>>>> 99f45f3510aa2c21f6c1e4b71ad0f72cbb69907a
     root.mainloop()
     
     
