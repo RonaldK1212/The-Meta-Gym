@@ -5,9 +5,9 @@ import sqlite3
 from datetime import datetime
 import pathlib
 
-#import RPi.GPIO as GPIO
-#from mfrc522 import SimpleMFRC522
-#reader = SimpleMFRC522()
+import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+reader = SimpleMFRC522()
 
 
 path = pathlib.Path(__file__).parent.absolute()
@@ -98,8 +98,8 @@ def scan_card():
         #WRITE CARD SCAN CODE 
         global user_id
         user_id_data.config(text = "")
-        user_id = input("Enter used ID to simulate card swipe: ")
-    #    user_id = reader.read()[0]
+    #    user_id = input("Enter used ID to simulate card swipe: ")
+        user_id = reader.read()[0]
         user_id_data.config(text = user_id)
     else:
         quit()
