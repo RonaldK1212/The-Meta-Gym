@@ -4,12 +4,12 @@ from tkinter import messagebox
 import sqlite3
 from datetime import datetime
 import pathlib
-
+import pathlib
 
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
 image_path = path / '..' / 'assets' / 'login_bg.png'
-
+db_path = path / 'meta_gym.db'
 
 #Setup
 root = Tk()
@@ -97,7 +97,7 @@ def get_user_info():
     y_pos = y_size/5
     global user_id,dor, first_name, last_name, email, phone_number, sex, dob, weight, calories_burned, energy_generated, points
     email = login_info_field.get()
-    con = sqlite3.connect('meta_gym.db')
+    con = sqlite3.connect(db_path)
     cur = con.cursor()
     cur.execute("SELECT * FROM users WHERE email= ?", (email,))
     (user_id, dor, first_name, last_name, email, phone_number, sex, dob, weight, calories_burned, energy_generated, points) = cur.fetchall()[0]
