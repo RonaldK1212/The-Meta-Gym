@@ -5,7 +5,7 @@ from tkinter import messagebox
 import sqlite3
 from datetime import datetime
 import pathlib
-import pathlib
+
 
 from numpy import equal
 
