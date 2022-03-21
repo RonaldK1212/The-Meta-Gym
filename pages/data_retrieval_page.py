@@ -1,4 +1,3 @@
-from lib2to3.pgen2.token import EQUAL
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -6,8 +5,6 @@ import sqlite3
 from datetime import datetime
 import pathlib
 
-
-from numpy import equal
 
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522

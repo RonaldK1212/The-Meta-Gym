@@ -11,7 +11,7 @@ import datetime
 #Create unique numbered CSV file every time the program is run
 
 def create_filename(user_id, date):
-    filename = str(user_id + date + "_sensor_data.csv")
+    filename = str(user_id + "_" + date + "_sensor_data.csv")
     return filename
 
 def save_data():
@@ -42,20 +42,24 @@ ser = serial.Serial('COM6', baudrate=9600, bytesize=8)  # open WINDOWS serial po
 #x.decode('utf-8').rstrip()
 #ser.close()
 
+
+
 date = datetime.datetime.now()
 datestring = date.strftime("%y%m%d%H%M%S")
 user_id = "test"
 # CSV STUFF
 filename = create_filename(user_id, datestring)
 
-data_file = open(filename, 'w', newline='')
+#Filepath Stuff
+path = pathlib.Path(__file__).parent.absolute()
+filepath = path / "Sensor Logs" / filename
+
+data_file = open(filepath, 'w', newline='')
 writer = csv.writer(data_file)
 
 header = ["Time (ms)","Encoder Counter", "RPM", "Voltage (mV)"]
 
-#Filepath Stuff
-path = pathlib.Path(__file__).parent.absolute()
-filepath = path / "Sensor Logs" / filename
+
 
 
 
