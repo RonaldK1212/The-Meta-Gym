@@ -79,7 +79,10 @@ def draw_labels(x_pos, y_pos):
 
 def draw_data(x_pos,y_pos):
     global user_id_label, first_name_data, last_name_data, phone_data,sex_data,dob_data,weight_data,dor_data
+    
     (user_id, first_name, last_name, phone_number, sex, dob, weight, dor) = get.all(scan_card())
+
+
     user_id_label.place(x = x_pos+250,y = y_pos+4*30, anchor = "w")
     first_name_data.place(x = x_pos,y = y_pos, anchor = "w")
     last_name_data.place(x = x_pos,y = y_pos+30, anchor = "w")
@@ -98,14 +101,7 @@ def draw_data(x_pos,y_pos):
     weight_data.config(text = weight, background="#292929", foreground = "#ffc815")
     dor_data.config(text = dor, background="#292929", foreground = "#ffc815")
     print("Data displayed")
-
-def draw_login_form(x_pos, y_pos):
-    global login_info_field
-    if not login_info_field  == None:
-        login_info_field.destroy()
-    login_info_field = ttk.Entry()
-    login_info_field.place(x = x_pos,y = y_pos ,width=300, anchor = "center")
-    print("Login form generated")    
+ 
 
 
 def main():
