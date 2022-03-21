@@ -4,9 +4,12 @@ from tkinter import messagebox
 import sqlite3
 from datetime import datetime
 import pathlib
+import sys
 
-#from ..scan_card import scan_card
+sys.path.append('..')
 
+from scan_card import scan_card
+from retrieve_data import get
 
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
@@ -76,7 +79,7 @@ def draw_labels(x_pos, y_pos):
 
 def draw_data(x_pos,y_pos):
     global user_id_label, first_name_data, last_name_data, phone_data,sex_data,dob_data,weight_data,dor_data
-    
+    (user_id, first_name, last_name, phone_number, sex, dob, weight, dor) = get.all(scan_card())
     user_id_label.place(x = x_pos+250,y = y_pos+4*30, anchor = "w")
     first_name_data.place(x = x_pos,y = y_pos, anchor = "w")
     last_name_data.place(x = x_pos,y = y_pos+30, anchor = "w")
@@ -102,39 +105,14 @@ def draw_login_form(x_pos, y_pos):
         login_info_field.destroy()
     login_info_field = ttk.Entry()
     login_info_field.place(x = x_pos,y = y_pos ,width=300, anchor = "center")
-    print("Login form generated")
-
-def get_user_info():
-    x_pos = (x_size/5)+30
-    y_pos = y_size/5
-    global user_id,dor, first_name, last_name, email, phone_number, sex, dob, weight, calories_burned, energy_generated, points, card_id, login_data
-    con = sqlite3.connect(db_path)
-    cur = con.cursor()
-    if not login_info_field  == None:
-        login_data = login_info_field.get()
-    if (login_method.get() == 2):
-       cur.execute("SELECT * FROM users WHERE id= ?", (card_id,))
-    elif (login_method.get() == 1):
-        cur.execute("SELECT * FROM users WHERE Phone_Number= ?", (login_data,))
-    else:
-        cur.execute("SELECT * FROM users WHERE email= ?", (login_data,))
-
-    (user_id, dor, first_name, last_name, email, phone_number, sex, dob, weight, calories_burned, energy_generated, points) = cur.fetchall()[0]
-    draw_data(x_pos,y_pos)
-    print("Retrieved user info")
-    
-
-def draw_buttons(x_pos, y_pos):
-    login_button = Button(root, text = "Login", command = get_user_info)
-    login_button.place(x = x_pos, y = y_pos, anchor ="center")
-    print("Buttons generated")
+    print("Login form generated")    
 
 
 def main():
     draw_decorations()
     draw_labels((x_size/5)+30,y_size/5)
+    draw_data((x_size/5)+30,y_size/5)
     
     root.mainloop()
-    print(login_method.get())
 
 main()
