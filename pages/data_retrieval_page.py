@@ -80,7 +80,7 @@ def draw_labels(x_pos, y_pos):
 def draw_data(x_pos,y_pos):
     global user_id_label, first_name_data, last_name_data, phone_data,sex_data,dob_data,weight_data,dor_data
     
-    (user_id, first_name, last_name, phone_number, sex, dob, weight, dor) = get.all(scan_card())
+    (user_id, dor, first_name, last_name, email, phone_number, sex, dob, weight, cal,energy,points) = get.all(scan_card())
 
 
     user_id_label.place(x = x_pos+250,y = y_pos+4*30, anchor = "w")
@@ -107,8 +107,9 @@ def draw_data(x_pos,y_pos):
 def main():
     draw_decorations()
     draw_labels((x_size/5)+30,y_size/5)
+    root.mainloop()
     draw_data((x_size/5)+30,y_size/5)
     
-    root.mainloop()
+    
 
 main()
