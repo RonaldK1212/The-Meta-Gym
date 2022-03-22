@@ -3,7 +3,7 @@ import pathlib
 
 user_id = 1
 path = pathlib.Path(__file__).parent.absolute()
-db_path = path / 'pages' / 'meta_gym.db'
+db_path = path / '..' / 'meta_gym.db'
 
 try:
     con = sqlite3.connect(db_path)

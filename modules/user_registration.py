@@ -13,7 +13,7 @@ reader = SimpleMFRC522()
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
 image_path = path / '..' / 'assets' / 'registration_bg.png'
-db_path = path / 'meta_gym.db'
+db_path = path / '..' / 'meta_gym.db'
 
 #Setup
 root = Tk()
