@@ -44,7 +44,7 @@ dor_data =         ttk.Label(root, font = label_font)
 login_data = None
 login_method = IntVar()
 using_card = None
-#card_id = scan_card()
+card_id = scan_card()
 
 user_id = None
 dor = None
@@ -113,20 +113,23 @@ def draw_data(x_pos,y_pos):
 def scan_card_sim():
     return input("Simulate scan card: ")
 
-card_id = scan_card_sim()
+
 
 def main():
-    draw_decorations()
-    print("Drew decorations")
-    draw_labels((x_size/5)+30,y_size/5)
-    print("Drew labels")
-
-    root.mainloop()
-    print("Ran mainloop")
-
-    draw_data((x_size/5)+30,y_size/5)
+    while True:
+        global card_id
+        draw_decorations()
+        draw_labels((x_size/5)+30,y_size/5)
+        while True: 
+            try:
+                card_id = scan_card()
+                draw_data((x_size/5)+30,y_size/5)
+                break
+            except:
+                print("Error, enter a proper ID")
+        
+        root.update()
     
-    
-    
 
+root.protocol("WM_DELETE_WINDOW", quit)
 main()
