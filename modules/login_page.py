@@ -6,12 +6,12 @@ from datetime import datetime
 import pathlib
 import sys
 
-#sys.path.append('..')
-#from scan_card import scan_card
-#from retrieve_data import get
+sys.path.append('..')
+from scan_card import scan_card
+from retrieve_data import get
 
 #from ..scan_card import scan_card
-from retrieve_data import get
+#from retrieve_data import get
 
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
@@ -44,7 +44,7 @@ dor_data =         ttk.Label(root, font = label_font)
 login_data = None
 login_method = IntVar()
 using_card = None
-card_id = scan_card()
+#card_id = scan_card()
 
 user_id = None
 dor = None
@@ -120,8 +120,10 @@ def main():
         global card_id
         draw_decorations()
         draw_labels((x_size/5)+30,y_size/5)
+        
         while True: 
             try:
+                root.update()
                 card_id = scan_card()
                 draw_data((x_size/5)+30,y_size/5)
                 break
