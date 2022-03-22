@@ -1,8 +1,9 @@
-from .pages import data_retrieval_page, user_registration
+from .modules import login_page
+from .modules import user_registration
 
 def main():
     user_registration.main()
-    data_retrieval_page.main()
+    login_page.main()
 
 
 main()
