@@ -10,9 +10,6 @@ sys.path.append('..')
 from scan_card import scan_card
 from retrieve_data import get
 
-#from ..scan_card import scan_card
-#from retrieve_data import get
-
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
 image_path = path / '..' / 'assets' / 'login_bg.png'
@@ -41,10 +38,6 @@ dob_data =         ttk.Label(root,  font = label_font)
 weight_data =      ttk.Label(root,          font = label_font)
 dor_data =         ttk.Label(root, font = label_font)
 
-login_data = None
-login_method = IntVar()
-using_card = None
-#card_id = scan_card()
 
 user_id = None
 dor = None
@@ -69,7 +62,7 @@ def draw_decorations():
     title = ttk.Label(root, text="THE META-GYM USER LOGIN", font = ("Roboto", 18, "bold"), style="BY.TLabel")
     title.place(x = 250,y = 35, anchor = "center")
     scan_card_title = ttk.Label(root, text="Please scan your card", font = ("Roboto", 14), style="SC.TLabel")
-    scan_card_title.place(x = 50, y = 350, anchor = "w")
+    scan_card_title.place(x = 20, y = 400, anchor = "w")
     print("Decorations generated")
 
 def draw_labels(x_pos, y_pos):

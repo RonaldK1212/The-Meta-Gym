@@ -1,7 +1,6 @@
 import sqlite3
 import pathlib
 
-user_id = 1
 path = pathlib.Path(__file__).parent.absolute()
 db_path = path / '..' / 'meta_gym.db'
 
@@ -12,9 +11,6 @@ except:
 
 cur = con.cursor()
 
-cur.execute("SELECT * FROM users WHERE id= ?", (user_id,))
-row = cur.fetchall()[0]
-first_name, last_name = (row[2], row[3])
 
 class get:
     def firstName(user_id):
