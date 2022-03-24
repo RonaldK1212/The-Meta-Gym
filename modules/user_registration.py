@@ -110,7 +110,11 @@ def fetch_data():
     last_name = last_name_field.get()
     email = email_field.get()
     phone = phone_field.get()
-    sex = sex_input.get()
+    if (sex_input.get() == 1):
+        sex = 'M'
+    elif (sex_input.get() == 2):
+        sex = 'F'
+    else: sex = 'X'
     dob = dob_field.get()
     weight = weight_field.get()
 
