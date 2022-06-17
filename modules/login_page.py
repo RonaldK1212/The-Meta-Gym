@@ -8,7 +8,7 @@ import sys
 
 sys.path.append('..')
 from scan_card import scan_card
-from retrieve_data import get
+from retrieve_user import get
 
 path = pathlib.Path(__file__).parent.absolute()
 print("Path = ",path)
