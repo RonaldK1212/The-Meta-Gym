@@ -1,4 +1,6 @@
+from numpy import record
 from write_csv import create_filename, save_data, read_serial, header, path
+import write_csv
 import datetime
 import sqlite3
 import pathlib
@@ -25,4 +27,5 @@ cur.execute("INSERT INTO sessions VALUES (?,?,?)", (filename, user_id, date))
 con.commit()
 con.close()
 
-save_data(filename, header)
+write_csv.create_file(filename, header)
+write_csv.record_workout()
