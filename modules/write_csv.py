@@ -79,22 +79,22 @@ def read_serial():  #reads serial input
 # SERIAL STUFF
 
 #ser = serial.Serial('COM3', baudrate=9600, bytesize=8)  # open WINDOWS serial port
-ser = serial.Serial('/dev/ttyACM0', baudrate=9600, bytesize=8)  # open LINUX serial port
+ser = serial.Serial('/dev/ttyACM0', baudrate=115200, bytesize=8)  # open LINUX serial port
 date = datetime.datetime.now()  #gets current date
 datestring = date.strftime("%y%m%d%H%M%S")  #formats date
 path = pathlib.Path(__file__).parent.absolute() #gets current path
 header = ["Milliseconds", "Voltage"] #csv columns/header
 
 def record_workout(filepath):
-
+    ser.flush()
     class MainWindow(QtWidgets.QMainWindow):
 
         def __init__(self, *args, **kwargs):
             super(MainWindow, self).__init__(*args, **kwargs)
-
+            
             self.graphWidget = pg.PlotWidget()
             self.setCentralWidget(self.graphWidget)
-
+            self.graphWidget.setYRange(0, 1200)
             self.x = list(range(100))  # 100 time points
             self.y = [0 for _ in range(100)]  # 100 data points
 
@@ -105,21 +105,21 @@ def record_workout(filepath):
             self.timer.setInterval(10)
             self.timer.timeout.connect(self.update_plot_data)
             self.timer.start()
-
+            
         def update_plot_data(self):
-
+            ser.flush()
             data = save_data(filepath)
             data = np.array(data, dtype=float)
             print(data)
             
             
-            if(data[0] and data[1]):
+            if(data[0] and (data[0] or data[0] == 0)):
                 self.x = self.x[1:]  # Remove the first y element.
-                self.x.append(data[0])  # Add a new value 1 higher than the last.
+                self.x.append(self.x[-1]+1)  # Add a new value 1 higher than the last.
 
 
                 self.y = self.y[1:]  # Remove the first
-                self.y.append(data[1])  # Add a new random value.
+                self.y.append(data[0])  # Add a new random value.
             
 
             self.data_line.setData(self.x, self.y)  # Update the data.
