@@ -24,4 +24,5 @@ filename = create_filename(user_id, datestring)
 cur.execute("INSERT INTO sessions VALUES (?,?,?)", (filename, user_id, date))
 con.commit()
 con.close()
+
 save_data(filename, header)

@@ -18,7 +18,7 @@ db_path = path / '..' / 'meta_gym.db'
 #Setup
 root = Tk()
 frm = ttk.Frame(root, padding=10)
-root.geometry("500x400")
+root.geometry("1024x600")
 root.title("Registration")
 root.resizable(width=False, height=False)
 bg = PhotoImage(file=image_path)

@@ -15,7 +15,7 @@ def displayData():
         y_values.append(random.randint(-5,5))
         for x in range(len(y_values)):
             print(y_values[x])
-        if(len(y_values) >= 100):
+        if(len(y_values) >= 10):
             y_values.pop(0)
             x_values.pop(0)
 
@@ -23,7 +23,9 @@ def displayData():
         plt.plot(x_values, y_values)
 
 
-    ani = FuncAnimation(plt.gcf(), animate, interval=1)
+    ani = FuncAnimation(plt.gcf(), animate, interval=1000)
 
     plt.tight_layout()
     plt.show()
+    
+displayData()

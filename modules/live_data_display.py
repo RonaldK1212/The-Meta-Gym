@@ -1,3 +1,7 @@
-from LIVE_DATA_TEST import displayData
+#from LIVE_DATA_TEST import displayData
 
-displayData()
+#displayData()
+
+from write_csv import displayLive
+
+displayLive()

@@ -35,7 +35,8 @@ selected_session = input("Select session number to view: ")
 log_path = logs_file / data[int(selected_session)-1][0]
 print("Log Path: ", log_path)
 
-dataFile = pd.read_csv(log_path)
+dataFile = pd.read_csv(log_path, usecols=["Voltage"])
+print(dataFile)
 dataFile.plot()
 
 plt.show()
