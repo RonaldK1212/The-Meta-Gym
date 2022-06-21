@@ -27,5 +27,5 @@ cur.execute("INSERT INTO sessions VALUES (?,?,?)", (filename, user_id, date))
 con.commit()
 con.close()
 
-write_csv.create_file(filename, header)
-write_csv.record_workout()
+filepath = write_csv.create_file(filename, header)
+write_csv.record_workout(filepath)

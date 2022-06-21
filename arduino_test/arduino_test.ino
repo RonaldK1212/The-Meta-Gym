@@ -14,7 +14,9 @@ void loop() {
     randNumber += x;
   }
   else randNumber -= x;
-
+  Serial.print(millis());
+  Serial.print(",");
   Serial.println(randNumber);
+  delay(10);
   
 }

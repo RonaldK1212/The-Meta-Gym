@@ -8,7 +8,7 @@ import pyqtgraph as pg
 import sys  # We need sys so that we can pass argv to QApplication
 import os
 import pandas as pd
-
+import numpy as np
 #===================================================================#
 #                            FUNCTIONS                              #
 #===================================================================#
@@ -31,8 +31,9 @@ def create_file(filename, header):   #writes data to csv file
         writer.writeheader()
         
     ser.flush()
+    return filepath
 
-def save_data():
+def save_data(filepath):
     with open(filepath, 'a') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=header)
 
@@ -58,9 +59,7 @@ def save_data():
             "Voltage": int(voltage)
         }
 
-
-    print(voltage)
-    writer.writerow(info)
+        writer.writerow(info)
     return data
            
 
@@ -79,13 +78,14 @@ def read_serial():  #reads serial input
 
 # SERIAL STUFF
 
+#ser = serial.Serial('COM3', baudrate=9600, bytesize=8)  # open WINDOWS serial port
 ser = serial.Serial('/dev/ttyACM0', baudrate=9600, bytesize=8)  # open LINUX serial port
 date = datetime.datetime.now()  #gets current date
 datestring = date.strftime("%y%m%d%H%M%S")  #formats date
 path = pathlib.Path(__file__).parent.absolute() #gets current path
 header = ["Milliseconds", "Voltage"] #csv columns/header
 
-def record_workout():
+def record_workout(filepath):
 
     class MainWindow(QtWidgets.QMainWindow):
 
@@ -102,20 +102,32 @@ def record_workout():
             self.data_line =  self.graphWidget.plot(self.x, self.y, pen=pen)
                     # ... init continued ...
             self.timer = QtCore.QTimer()
-            self.timer.setInterval(30)
+            self.timer.setInterval(10)
             self.timer.timeout.connect(self.update_plot_data)
             self.timer.start()
 
         def update_plot_data(self):
 
-            data = save_data()
+            data = save_data(filepath)
+            data = np.array(data, dtype=float)
+            print(data)
             
-            self.x = self.x[1:]  # Remove the first y element.
-            self.x.append(self.x[-1] + 1)  # Add a new value 1 higher than the last.
+            
+            if(data[0] and data[1]):
+                self.x = self.x[1:]  # Remove the first y element.
+                self.x.append(data[0])  # Add a new value 1 higher than the last.
 
 
-            self.y = self.y[1:]  # Remove the first
-            self.y.append(data[0])  # Add a new random value.
+                self.y = self.y[1:]  # Remove the first
+                self.y.append(data[1])  # Add a new random value.
             
 
             self.data_line.setData(self.x, self.y)  # Update the data.
+            
+
+            
+
+    app = QtWidgets.QApplication(sys.argv)
+    w = MainWindow()
+    w.show()
+    sys.exit(app.exec_())
