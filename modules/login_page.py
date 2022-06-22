@@ -5,6 +5,8 @@ import sqlite3
 from datetime import datetime
 import pathlib
 import sys
+from record_workout import record
+from retrieve_workout import retrieve  
 
 sys.path.append('..')
 from scan_card import scan_card
@@ -52,6 +54,12 @@ calories_burned = None
 energy_generated = None
 points = None
 login_info_field = None
+
+def draw_buttons(): #draw the record and retrieve buttons
+    record_button = Button(root, command = record, text = "Record Workout")  #create button objects
+    retrieve_button = Button(root, command = retrieve, text = "Retrieve Workout")
+    record_button.place(x = 300, y = 300)   #place buttons
+    retrieve_button.place(x = 600, y = 300)
 
 
 def draw_decorations():
@@ -106,8 +114,6 @@ def draw_data(x_pos,y_pos):
 def scan_card_sim():
     return input("Simulate scan card: ")
 
-
-
 def main():
     while True:
         global card_id
@@ -123,8 +129,6 @@ def main():
             except:
                 print("Error, enter a proper ID")
         
-        root.update()
-    
-
-root.protocol("WM_DELETE_WINDOW", quit)
+        root.update()    
+        root.protocol("WM_DELETE_WINDOW", quit)
 main()
