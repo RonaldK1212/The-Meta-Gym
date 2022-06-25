@@ -1,98 +1,40 @@
+from PyQt5 import QtWidgets, QtCore
+from pyqtgraph import PlotWidget, plot
+import pyqtgraph as pg
 import sys
-from PyQt5 import QtCore, QtWidgets
+import os
+from random import randint
 
-
-class MainWindow(QtWidgets.QWidget):
-
-    switch_window = QtCore.pyqtSignal(str)
-
-    def __init__(self):
-        QtWidgets.QWidget.__init__(self)
-        self.setWindowTitle('Main Window')
-
-        layout = QtWidgets.QGridLayout()
-
-        self.line_edit = QtWidgets.QLineEdit()
-        layout.addWidget(self.line_edit)
-
-        self.button = QtWidgets.QPushButton('Switch Window')
-        self.button.clicked.connect(self.switch)
-        layout.addWidget(self.button)
-
-        self.setLayout(layout)
-
-    def switch(self):
-        self.switch_window.emit(self.line_edit.text())
-
-
-class WindowTwo(QtWidgets.QWidget):
-
-    def __init__(self, text):
-        QtWidgets.QWidget.__init__(self)
-        self.setWindowTitle('Window Two')
-
-        layout = QtWidgets.QGridLayout()
-
-        self.label = QtWidgets.QLabel(text)
-        layout.addWidget(self.label)
-
-        self.button = QtWidgets.QPushButton('Close')
-        self.button.clicked.connect(self.close)
-
-        layout.addWidget(self.button)
-
-        self.setLayout(layout)
-
-
-class Login(QtWidgets.QWidget):
-
-    switch_window = QtCore.pyqtSignal()
-
-    def __init__(self):
-        QtWidgets.QWidget.__init__(self)
-        self.setWindowTitle('Login')
-
-        layout = QtWidgets.QGridLayout()
-
-        self.button = QtWidgets.QPushButton('Login')
-        self.button.clicked.connect(self.login)
-
-        layout.addWidget(self.button)
-
-        self.setLayout(layout)
-
-    def login(self):
-        self.switch_window.emit()
-
-
-class Controller:
-
-    def __init__(self):
-        pass
-
-    def show_login(self):
-        self.login = Login()
-        self.login.switch_window.connect(self.show_main)
-        self.login.show()
-
-    def show_main(self):
-        self.window = MainWindow()
-        self.window.switch_window.connect(self.show_window_two)
-        self.login.close()
-        self.window.show()
-
-    def show_window_two(self, text):
-        self.window_two = WindowTwo(text)
-        self.window.close()
-        self.window_two.show()
-
-
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    controller = Controller()
-    controller.show_login()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
+class MainWindow(QtWidgets.QMainWindow):
+    
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+        
+        self.graphWidget = pg.PlotWidget()
+        self.setCentralWidget(self.graphWidget)
+        
+        self.x = list(range(100))
+        self.y = [randint(0,100) for _ in range(100)]
+        pg.setConfigOptions(antialias=False)        
+        pen = pg.mkPen(color=(255,255,0), width = 1.5)
+        self.data_line = self.graphWidget.plot(self.x, self.y, pen=pen)
+        
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(100)
+        self.timer.timeout.connect(self.update_plot_data)
+        self.timer.start()
+        
+    def update_plot_data(self):
+        
+        self.x = self.x[1:]
+        self.x.append(self.x[-1] + 1)
+        
+        self.y = self.y[1:]
+        self.y.append(randint(0,100))
+        
+        self.data_line.setData(self.x, self.y)
+        
+app = QtWidgets.QApplication(sys.argv)
+w = MainWindow()
+w.show()
+sys.exit(app.exec_())

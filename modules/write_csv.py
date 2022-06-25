@@ -2,6 +2,7 @@ import csv
 import serial
 import pathlib
 import datetime
+import sqlite3
 from PyQt5 import QtWidgets, QtCore
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
@@ -78,8 +79,8 @@ def read_serial():  #reads serial input
 
 # SERIAL STUFF
 
-ser = serial.Serial('COM3', baudrate=9600, bytesize=8)  # open WINDOWS serial port
-#ser = serial.Serial('/dev/ttyACM0', baudrate=115200, bytesize=8)  # open LINUX serial port
+#ser = serial.Serial('COM3', baudrate=9600, bytesize=8)  # open WINDOWS serial port
+ser = serial.Serial('/dev/ttyACM0', baudrate=115200, bytesize=8)  # open LINUX serial port
 date = datetime.datetime.now()  #gets current date
 datestring = date.strftime("%y%m%d%H%M%S")  #formats date
 path = pathlib.Path(__file__).parent.absolute() #gets current path

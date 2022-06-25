@@ -9,21 +9,40 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import threading
+import helper_functions
 
+user_id = 999888777
+
+
+    
+
+
+def scan_card():
+    global user_id
+    scanner = helper_functions.scan_card_f
+    while True:
+        user_id = scanner()
+    
+
+                       
+                       
 class Ui_MainWindow(object):
+    scanner_thread = threading.Thread(target=scan_card)
+    
     def registerWindow(self):
         import registration_page 
         self.window = QtWidgets.QMainWindow()
         self.ui = registration_page.Ui_RegisterWindow()
         self.ui.setupUi(self.window)
         self.window.show()
-        try:
-            self.ui.scanner_thread.start()
-            self.ui.scanner_thread.join()
-        except Exception:
-            pass
-        user_id = registration_page.user_id
-        self.ui.idOutput.setText(user_id)
+        
+        
+        
+        self.ui.idOutput.setText(str(user_id))
+    scanner_thread.start()
+    #scanner_thread.join()
+    #openRegisterWindow = threading.Thread(target=registerWindow)
 
     def loginWindow(self):
         import login_page
@@ -32,14 +51,10 @@ class Ui_MainWindow(object):
         self.ui = login_page.Ui_LoginWindow()
         self.ui.setupUi(self.window)
         self.window.show()
-        try:
-            self.ui.scanner_thread.start()
-            self.ui.scanner_thread.join()
-        except Exception:
-            pass
-        user_id = login_page.user_id
-        user_data = getUserData(user_id)
-        print(user_data)
+        login_page.user_id = str(user_id)
+        print('login_page.user_id =  ', login_page.user_id)
+        user_data = getUserData(login_page.user_id)
+        #print(user_data)
         self.ui.firstNameOutput.setText(str(user_data[0][2]))
         self.ui.lastNameOutput.setText(str(user_data[0][3]))
         self.ui.emailOutput.setText(str(user_data[0][4]))
@@ -58,10 +73,12 @@ class Ui_MainWindow(object):
         icon.addPixmap(QtGui.QPixmap("assets/TMG_Logo_only.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("")
+        
+        MainWindow.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.loginButton = QtWidgets.QPushButton(self.centralwidget , clicked = lambda: self.loginWindow())
-        self.loginButton.clicked.connect(MainWindow.close)
         self.loginButton.setEnabled(True)
         self.loginButton.setGeometry(QtCore.QRect(220, 380, 230, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -84,7 +101,7 @@ class Ui_MainWindow(object):
         self.loginButton.setFlat(False)
         self.loginButton.setObjectName("loginButton")
         self.registerButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.registerWindow())
-        self.registerButton.clicked.connect(MainWindow.close)
+        #self.registerButton.clicked.connect(MainWindow.close)
         self.registerButton.setGeometry(QtCore.QRect(570, 380, 230, 80))
         font = QtGui.QFont()
         font.setFamily("BR Cobane")
@@ -124,6 +141,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Home"))
         self.loginButton.setText(_translate("MainWindow", "LOGIN"))
         self.registerButton.setText(_translate("MainWindow", "REGISTER"))
+        
+
+       # ui.idOutput.setText(user_id)
+    
+    
 
 import resources_rc
 

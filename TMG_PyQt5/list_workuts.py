@@ -9,12 +9,27 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from helper_functions import getUserWorkouts, displayWorkout
+workoutsList = None
 
 
 class Ui_WorkoutsWindow(object):
+    user_id = None
+    
+    def showWorkout(self):
+        global workoutsList
+        workout = self.comboBox.currentText()
+        (_,workoutNumber,_,_,_) = workout.split(" ")
+        workoutNumber = int(workoutNumber)-1
+        filename = self.comboBox.currentData()
+        print(filename)
+        displayWorkout(filename[0])
+        #print(workoutNumber)
+    
     def setupUi(self, WorkoutsWindow):
         WorkoutsWindow.setObjectName("WorkoutsWindow")
         WorkoutsWindow.resize(1024, 600)
+        WorkoutsWindow.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.centralwidget = QtWidgets.QWidget(WorkoutsWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -123,7 +138,8 @@ class Ui_WorkoutsWindow(object):
         icon.addPixmap(QtGui.QPixmap("assets/arrow-left-solid-yellow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.commandLinkButton.setIcon(icon)
         self.commandLinkButton.setObjectName("commandLinkButton")
-        self.viewWorkoutButton = QtWidgets.QPushButton(self.centralwidget)
+        self.commandLinkButton.clicked.connect(WorkoutsWindow.close)
+        self.viewWorkoutButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.showWorkout())
         self.viewWorkoutButton.setEnabled(True)
         self.viewWorkoutButton.setGeometry(QtCore.QRect(130, 360, 230, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)

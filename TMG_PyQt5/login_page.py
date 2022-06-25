@@ -10,15 +10,46 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import helper_functions
-import threading
 user_data = None
 user_id = None
 
 class Ui_LoginWindow(object):
-
+        
+        def listWorkouts(self):
+                from list_workuts import Ui_WorkoutsWindow
+                
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_WorkoutsWindow()
+                #self.ui.user_id = user_id
+                self.ui.setupUi(self.window)
+                self.window.show()
+                self.addWorkouts()
+                
+        def addWorkouts(self):
+            global user_id
+            from helper_functions import getUserWorkouts
+            from datetime import datetime
+            from list_workuts import workoutsList
+            
+            data = getUserWorkouts(str(user_id))
+            workoutsList = data
+            #list_workuts.workoutsList = data
+            print([data, user_id])
+            count=1
+            for _ in data:
+                date_str = _[1]
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S.%f") 
+                name = 'Workout ' + str(count) +"   " + date_obj.strftime("%Y-%m-%d")
+                self.ui.comboBox.addItem(name, _)
+                count += 1
+        def startWorkout(self):
+            from helper_functions import recordWorkout
+            recordWorkout(user_id)
+        
         def setupUi(self, LoginWindow):
                 LoginWindow.setObjectName("LoginWindow")
                 LoginWindow.resize(1024, 600)
+                LoginWindow.setWindowFlag(QtCore.Qt.FramelessWindowHint)
                 icon = QtGui.QIcon()
                 icon.addPixmap(QtGui.QPixmap("assets/TMG_Logo_only.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 LoginWindow.setWindowIcon(icon)
@@ -34,7 +65,7 @@ class Ui_LoginWindow(object):
                 self.label.setFont(font)
                 self.label.setStyleSheet("color: rgb(255, 200, 21);")
                 self.label.setObjectName("label")
-                self.startWorkoutButton = QtWidgets.QPushButton(self.centralwidget)
+                self.startWorkoutButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.startWorkout())
                 self.startWorkoutButton.setGeometry(QtCore.QRect(600, 460, 230, 80))
                 font = QtGui.QFont()
                 font.setFamily("BR Cobane")
@@ -53,7 +84,7 @@ class Ui_LoginWindow(object):
                 self.startWorkoutButton.setDefault(False)
                 self.startWorkoutButton.setFlat(False)
                 self.startWorkoutButton.setObjectName("startWorkoutButton")
-                self.yourWorkoutsButton = QtWidgets.QPushButton(self.centralwidget)
+                self.yourWorkoutsButton = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.listWorkouts())
                 self.yourWorkoutsButton.setEnabled(True)
                 self.yourWorkoutsButton.setGeometry(QtCore.QRect(260, 460, 230, 80))
                 sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -160,6 +191,7 @@ class Ui_LoginWindow(object):
                 self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
                 self.frame_2.setObjectName("frame_2")
                 self.commandLinkButton = QtWidgets.QCommandLinkButton(self.frame_2)
+                self.commandLinkButton.clicked.connect(LoginWindow.close)
                 self.commandLinkButton.setGeometry(QtCore.QRect(20, 20, 80, 40))
                 self.commandLinkButton.setStyleSheet("color: rgb(255, 200, 21);\n"
                 "selection-background-color: rgba(255, 255, 255, 0);\n"
@@ -195,15 +227,7 @@ class Ui_LoginWindow(object):
                 self.idLabel.setText(_translate("LoginWindow", "ID:   "))
                 self.dorLabel.setText(_translate("LoginWindow", "Date of Registration:"))
                 self.commandLinkButton.setText(_translate("LoginWindow", "Home"))
-        def scanUpdate():
-                global user_id
-                while True:
-                        user_id=str(helper_functions.scan_card_f())
-                       # ui.idOutput.setText(user_id)
-                        if user_id == '999888777':
-                                break 
 
-        scanner_thread = threading.Thread(target=scanUpdate)
 
 import resources_rc
 
@@ -215,5 +239,5 @@ if __name__ == "__main__":
     ui = Ui_LoginWindow()
     ui.setupUi(LoginWindow)
     LoginWindow.show()
-    ui.scanner_thread.start()
     sys.exit(app.exec_())
+

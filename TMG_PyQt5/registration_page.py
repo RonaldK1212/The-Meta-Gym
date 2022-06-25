@@ -13,8 +13,6 @@ import helper_functions
 import threading
 from datetime import datetime
 
-user_id = None
-
 class Ui_RegisterWindow(object):
         def fetchUserData(self): #gets used data from text boxes (user input)
                 data = []
@@ -26,7 +24,7 @@ class Ui_RegisterWindow(object):
                 data.append('M' if self.sexInput.currentText() == 'Male' else 'F' if self.sexInput.currentText() == 'Female' else 'O')
                 data.append(self.dobInput.text())
                 data.append(self.weightInput.text())
-                print(data)
+                #print(data)
                 return data
 
         def saveInfo(self): #register user in database
@@ -37,19 +35,21 @@ class Ui_RegisterWindow(object):
                 data.append(dor)
                 for _ in entered_data:
                         data.append(_)
-                print(data)
+                #print(data)
                 helper_functions.register_user(data)
 
         def mainWindow(self):
-                from main_page import Ui_MainWindow
+                import main_page
                 self.window = QtWidgets.QMainWindow()
-                self.ui = Ui_MainWindow()
+                self.ui = main_page.Ui_MainWindow()
+                self.ui.user_id = None
                 self.ui.setupUi(self.window)
                 self.window.show()
 
         def setupUi(self, RegisterWindow):
                 RegisterWindow.setObjectName("RegisterWindow")
                 RegisterWindow.resize(1024, 600)
+                RegisterWindow.setWindowFlag(QtCore.Qt.FramelessWindowHint)
                 self.centralwidget = QtWidgets.QWidget(RegisterWindow)
                 self.centralwidget.setObjectName("centralwidget")
                 self.frame = QtWidgets.QFrame(self.centralwidget)
@@ -183,7 +183,8 @@ class Ui_RegisterWindow(object):
                 font.setWeight(75)
                 self.label.setFont(font)
                 self.label.setObjectName("label")
-                self.commandLinkButton_2 = QtWidgets.QCommandLinkButton(self.centralwidget, clicked = lambda: self.mainWindow())
+                #self.commandLinkButton_2 = QtWidgets.QCommandLinkButton(self.centralwidget, clicked = lambda: self.mainWindow())
+                self.commandLinkButton_2 = QtWidgets.QCommandLinkButton(self.centralwidget)
                 self.commandLinkButton_2.clicked.connect(RegisterWindow.close)
                 self.commandLinkButton_2.setGeometry(QtCore.QRect(20, 20, 80, 40))
                 self.commandLinkButton_2.setStyleSheet("color: rgb(41, 41, 41);\n"
@@ -223,15 +224,15 @@ class Ui_RegisterWindow(object):
                 self.label.setText(_translate("RegisterWindow", "THE META-GYM USER REGISTRATION"))
                 self.commandLinkButton_2.setText(_translate("RegisterWindow", "Home"))
 
-        def scanUpdate():
-                global user_id
-                while True:
-                        user_id=str(helper_functions.scan_card_f())
-                       # ui.idOutput.setText(user_id)
-                        if user_id == '999888777':
-                                break 
+#         def scanUpdate():
+#                 global user_id
+#                 while True:
+#                         user_id=str(helper_functions.scan_card_f())
+#                        # ui.idOutput.setText(user_id)
+#                         if user_id == '999888777':
+#                                 break 
 
-        scanner_thread = threading.Thread(target=scanUpdate)
+#         scanner_thread = threading.Thread(target=scanUpdate)
 
 import resources_rc
 
@@ -243,6 +244,6 @@ if __name__ == "__main__":
         ui = Ui_RegisterWindow()
         ui.setupUi(RegisterWindow)
         RegisterWindow.show()
-        ui.scanner_thread.start()
+        #ui.scanner_thread.start()
         sys.exit(app.exec_())
 
