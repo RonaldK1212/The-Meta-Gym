@@ -88,10 +88,19 @@ def displayWorkout(filename): #gets data of a SINGLE workout
                 self.button = self.toolbar.addAction("Close", self.closeWorkout)                
     
                 self.y = data["Voltage"]
+
+                n_series = pd.Series(self.y)
+                r = 15
+                windows = n_series.rolling(r)
+                mov_avg = windows.mean()
+                self.y = mov_avg.tolist()
+                        
+
                 pg.setConfigOptions(antialias=False)        
+                self.graphWidget.addLegend()
                 pen = pg.mkPen(color=(255,255,0), width = 1.5)
-                self.data_line = self.graphWidget.plot(self.y, pen=pen)
-                self.graphWidget.setYRange(0, 1200)
+                self.data_line = self.graphWidget.plot(self.y, pen=pen, name="Voltage (mV)")
+                self.graphWidget.setYRange(0, 4300)
                 
             def closeWorkout(self):
                 self.close()
@@ -101,6 +110,9 @@ def displayWorkout(filename): #gets data of a SINGLE workout
     if(sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QtGui.QApplication.instance().exec_()
 
+
+distance = 0
+maxVoltage = 0
 
 def recordWorkout(user_id):
     import csv
@@ -118,6 +130,7 @@ def recordWorkout(user_id):
     
     filename = None
     filepath = None
+
 
     def create_filename(user_id, date): #Create unique numbered CSV file every time the program is run
         filename = str(str(user_id) + "_" + date + "_sensor_data.csv")
@@ -158,8 +171,18 @@ def recordWorkout(user_id):
 
             writer.writerow(info)
         return data
+
+
+    def postSessionData():
+        con = db()
+        cur = con.cursor()
+        maxSpeed = ((((maxVoltage/1000) * 13.75/2) * 2108) * 60)/1000 #speed in KM/H
+        cur.execute('UPDATE sessions SET end_time = (?), distance = (?), max_speed = (?), calories = (?) WHERE user_id = (?) and timestamp = (?)', (datetime.datetime.now(),distance,maxSpeed,distance * 0.03, user_id, date ))
+        con.commit()
+        con.close()
+
     
-    
+    #ser = serial.Serial('COM3', baudrate=9600, bytesize=8)  # open LINUX serial port
     ser = serial.Serial('/dev/ttyACM0', baudrate=115200, bytesize=8)  # open LINUX serial port
     date = datetime.datetime.now()  #gets current date
     datestring = date.strftime("%y%m%d%H%M%S")  #formats date
@@ -177,28 +200,37 @@ def recordWorkout(user_id):
                 self.setCentralWidget(self.graphWidget)
                 self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
                 self.setGeometry(0,0,1024,600)
-                
+                self.graphWidget.addLegend()
                 self.toolbar = self.addToolBar("End Workout")
                 self.button = self.toolbar.addAction("End Workout", self.endWorkout)                
-                
+                #self.graphWidget.add
                 self.x = list(range(100))
                 self.y = [0 for _ in range(100)]
+
                 pg.setConfigOptions(antialias=False)        
+                
                 pen = pg.mkPen(color=(255,255,0), width = 1.5)
-                self.data_line = self.graphWidget.plot(self.x, self.y, pen=pen)
-                self.graphWidget.setYRange(0, 1200)
+                
+                self.data_line = self.graphWidget.plot(self.x, self.y, pen=pen, name="Voltage (mV)", fillLevel=-0.3, brush=(255,255,0,50))
+                
+                self.graphWidget.setYRange(0, 4300)
                 self.timer = QtCore.QTimer()
                 self.timer.setInterval(50)
                 self.timer.timeout.connect(self.update_plot_data)
                 self.timer.start()
                 
             def endWorkout(self):
+                postSessionData()
                 self.close()
                 self.stopFlag = True
                 #QtGui.QApplication.instance().quit()
             
+
+            
+
             def update_plot_data(self):
                 #ser.flush()
+                global distance, maxVoltage
                 if self.stopFlag is not True:
                     data = save_data(filepath)
                     data = np.array(data, dtype=float)
@@ -208,11 +240,25 @@ def recordWorkout(user_id):
                         self.x = self.x[1:]  # Remove the first y element.
                         self.x.append(self.x[-1]+1)  # Add a new value 1 higher than the last.
 
+                        n_series = pd.Series(self.y)
+                        r = 15
+                        windows = n_series.rolling(r)
+                        mov_avg = windows.mean()
+                        mov_avg_list = mov_avg.tolist()
+                        
 
                         self.y = self.y[1:]  # Remove the first
                         self.y.append(data[0])  # Add a new value.
                     
-                    self.data_line.setData(self.x, self.y)
+                    self.data_line.setData(self.x, mov_avg_list)
+
+                    voltage = data[0] / 1000
+
+                    rpm = voltage * 13.75
+                    distance = distance + (rpm/60000) * 2108 * 50 / 1000
+
+                    if voltage > maxVoltage:
+                        maxVoltage = voltage
                 
                 
         #app = QtWidgets.QApplication(sys.argv)
@@ -231,18 +277,10 @@ def recordWorkout(user_id):
     datestring = date.strftime("%y%m%d%H%M%S")  #formats date
     filename = create_filename(user_id, datestring)
 
-    cur.execute("INSERT INTO sessions VALUES (?,?,?)", (filename, user_id, date))
+    cur.execute("INSERT INTO sessions VALUES (?,?,?, NULL, NULL, NULL, NULL, NULL)", (filename, user_id, date))
     con.commit()
     con.close()
 
     filepath = create_file(filename, header)
     record_workout(filepath)
 
-    
-    
- 
-
-    
-
-#recordWorkout(999888777)
-    
